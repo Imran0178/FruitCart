@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import '';
+import 'package:my_app/crud/masterlist.dart';
+
+
 import 'Api/API.dart';
 
+import 'crud/addnewfruit.dart';
 import 'product.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -15,6 +18,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // Product abc=Product(productName, weight, originalPrice, offerPrice, imagePath, labelName, freeLabel),
   List<Product> productlists = [];
+
+  int selectedIndex = 0;
   // int _counter = 0;
 
   // void _incrementCounter() {
@@ -34,126 +39,134 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.white,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(40))),
-                padding: const EdgeInsets.all(8.0),
-                margin: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                child: Row(
-                  children: [
+        child: (selectedIndex == 3)
+          //  ? const AddFruitForm()
+          ? const MasterList()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
                     Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[500],
-                          border: Border.all(width: 2, color: Colors.grey)),
-                      child: const Icon(
-                        Icons.home,
-                        color: Colors.white,
-                        size: 35,
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.white,
+                          ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(40))),
+                      padding: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[500],
+                                border:
+                                    Border.all(width: 2, color: Colors.grey)),
+                            child: const Icon(
+                              Icons.home,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Home',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.green),
+                                ),
+                                Text(
+                                  'Amazing grace apartments, Koramagla, Banglore.',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    DefaultTabController(
+                      length: 4, // length of tabs
+                      initialIndex: 0,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const <Widget>[
+                            TabBar(
+                              labelColor: Colors.green,
+                              unselectedLabelColor: Colors.black,
+                              indicatorColor: Colors.transparent,
+                              tabs: [
+                                Tab(
+                                  child: Text(
+                                    "Home",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    "Fruits",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    "Veggies",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    "Pulses",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ]),
+                    ),
+                    Row(
+                      children: const [
+                        SizedBox(width: 5),
+                        ChoiceChip(
+                          label: Text('Fresh'),
+                          selected: true,
+                          selectedColor: Colors.green,
+                        ),
+                        SizedBox(width: 5),
+                        ChoiceChip(
+                          label: Text('Exotic'),
+                          selected: true,
+                        ),
+                        SizedBox(width: 5),
+                        ChoiceChip(
+                          label: Text('Melons'),
+                          selected: true,
+                        ),
+                      ],
                     ),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Home',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 20, color: Colors.green),
-                          ),
-                          Text(
-                            'Amazing grace apartments, Koramagla, Banglore.',
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: productlists.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return fruitCard(context, index);
+                              }),
+                        ]),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              DefaultTabController(
-                length: 4, // length of tabs
-                initialIndex: 0,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const <Widget>[
-                      TabBar(
-                        labelColor: Colors.green,
-                        unselectedLabelColor: Colors.black,
-                        indicatorColor: Colors.transparent,
-                        tabs: [
-                          Tab(
-                            child: Text(
-                              "Home",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          Tab(
-                            child: Text(
-                              "Fruits",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          Tab(
-                            child: Text(
-                              "Veggies",
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                          Tab(
-                            child: Text(
-                              "Pulses",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ]),
-              ),
-              Row(
-                children: const [
-                  SizedBox(width: 5),
-                  ChoiceChip(
-                    label: Text('Fresh'),
-                    selected: true,
-                  ),
-                  SizedBox(width: 5),
-                  ChoiceChip(
-                    label: Text('Exotic'),
-                    selected: true,
-                  ),
-                  SizedBox(width: 5),
-                  ChoiceChip(
-                    label: Text('Melons'),
-                    selected: true,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: productlists.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return fruitCard(context, index);
-                        }),
                   ]),
-                ),
-              ),
-            ]),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
+        showSelectedLabels:false,
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -177,6 +190,11 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.green,
           ),
         ],
+        onTap: (selected) {
+          setState(() {
+            selectedIndex = selected;
+          });
+        },
       ),
     );
   }
@@ -247,10 +265,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: const TextStyle(
                           fontSize: 16, color: Color.fromARGB(255, 51, 51, 51)),
                     ),
-                    SizedBox(
-                      width: 50.0,
+                    const SizedBox(
+                      width: 30.0,
                     ),
                     Card(
+                      
                       color: Color.fromARGB(255, 209, 220, 226),
                       child: Row(
                         children: [

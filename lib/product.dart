@@ -33,4 +33,11 @@ class Product {
 
     return data;
   }
+
+  void postProduct(Type product) {
+    
+  }
+
+
+  
 }
