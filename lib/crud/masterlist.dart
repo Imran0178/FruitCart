@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -19,12 +21,14 @@ class MasterList extends StatefulWidget {
 
 class _MasterListState extends State<MasterList> {
   List<Product> productlists = [];
+  //late Future<Product> futureProducts;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     loadproducts();
+    //futureProducts = fetchproducts();
   }
 
   @override
@@ -38,7 +42,7 @@ class _MasterListState extends State<MasterList> {
           IconButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddFruitForm()));
+                  MaterialPageRoute(builder: (context) => AddFruitForm(null)));
             },
             icon: Icon(Icons.add),
           ),
@@ -137,15 +141,22 @@ class _MasterListState extends State<MasterList> {
                                 ],
                               ),
                               Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                  children: const [
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
                                     IconButton(
-                                        onPressed: null,
-                                        icon: Icon(Icons.edit)),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AddFruitForm(productlists[index])));
+                                        },
+                                        icon: const Icon(Icons.edit)),
                                     IconButton(
-                                        onPressed: null,
-                                        icon: Icon(Icons.delete)),
+                                        onPressed: () {
+                                          deleteproduct(productlists[index]);
+                                        },
+                                        icon: const Icon(Icons.delete)),
                                   ]),
                             ],
                           ),
@@ -167,5 +178,10 @@ class _MasterListState extends State<MasterList> {
     setState(() {
       products.forEach((post) => productlists.add(post));
     });
+  }
+
+  void deleteproduct(Product id) {
+    ApiProvider apiProvider = ApiProvider();
+    apiProvider.deleteproduct(jsonEncode(id));
   }
 }

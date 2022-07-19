@@ -1,4 +1,5 @@
 class Product {
+  int productId = 0;
   String productName = '';
   String weight = '';
   String originalPrice = '';
@@ -8,10 +9,11 @@ class Product {
   String freeLabel = '';
   int quantity = 0;
 
-  Product(this.productName, this.weight, this.originalPrice, this.offerPrice,
-      this.imagePath, this.labelName, this.freeLabel);
+  Product(this.productId, this.productName, this.weight, this.originalPrice,
+      this.offerPrice, this.imagePath, this.labelName, this.freeLabel);
 
   Product.fromJson(Map<String, dynamic> json) {
+    productId = json['productId'];
     productName = json['productName'];
     weight = json['weight'];
     originalPrice = json['originalPrice'];
@@ -23,6 +25,7 @@ class Product {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['productId'] = this.productId;
     data['productName'] = this.productName;
     data['weight'] = this.weight;
     data['originalPrice'] = this.originalPrice;
@@ -34,10 +37,5 @@ class Product {
     return data;
   }
 
-  void postProduct(Type product) {
-    
-  }
-
-
-  
+  void postProduct(Type product) {}
 }

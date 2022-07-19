@@ -269,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: 30.0,
                     ),
                     Card(
-                      
+                    
                       color: Color.fromARGB(255, 209, 220, 226),
                       child: Row(
                         children: [

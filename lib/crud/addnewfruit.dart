@@ -6,8 +6,6 @@ import 'package:my_app/product.dart';
 
 import '../Api/API.dart';
 
-
-
 // class AddFruit extends StatelessWidget {
 //   const AddFruit({Key? key}) : super(key: key);
 
@@ -26,7 +24,8 @@ import '../Api/API.dart';
 // }
 
 class AddFruitForm extends StatefulWidget {
-  const AddFruitForm({Key? key}) : super(key: key);
+  Product? tempProduct;
+  AddFruitForm(this.tempProduct, {Key? key}) : super(key: key);
 
   @override
   AddFruit createState() => AddFruit();
@@ -35,7 +34,16 @@ class AddFruitForm extends StatefulWidget {
 class AddFruit extends State<AddFruitForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Product newProduct = Product('', '', '', '', '', '', '');
+  Product newProduct = Product(0, '', '', '', '', '', '', '');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.tempProduct != null) {
+      newProduct = widget.tempProduct!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +61,7 @@ class AddFruit extends State<AddFruitForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
+                    initialValue: newProduct.productName,
                     decoration: const InputDecoration(
                       labelText: ' Product Name',
                       hintText: ' Enter the product name',
@@ -67,6 +76,7 @@ class AddFruit extends State<AddFruitForm> {
                       newProduct.productName = value!;
                     }),
                 TextFormField(
+                    initialValue: newProduct.imagePath,
                     decoration: const InputDecoration(
                       labelText: 'Image Url',
                     ),
@@ -74,6 +84,7 @@ class AddFruit extends State<AddFruitForm> {
                       newProduct.imagePath = value!;
                     }),
                 TextFormField(
+                    initialValue: newProduct.weight,
                     decoration: const InputDecoration(
                       labelText: ' Weight',
                       hintText: ' weight',
@@ -82,6 +93,7 @@ class AddFruit extends State<AddFruitForm> {
                       newProduct.weight = value!;
                     }),
                 TextFormField(
+                    initialValue: newProduct.originalPrice,
                     decoration: const InputDecoration(
                       labelText: ' Original price',
                       hintText: ' Enter the price',
@@ -90,6 +102,7 @@ class AddFruit extends State<AddFruitForm> {
                       newProduct.originalPrice = value!;
                     }),
                 TextFormField(
+                    initialValue: newProduct.offerPrice,
                     decoration: const InputDecoration(
                       labelText: ' Offer Price',
                       hintText: ' Enter The Price',
@@ -98,6 +111,7 @@ class AddFruit extends State<AddFruitForm> {
                       newProduct.offerPrice = value!;
                     }),
                 TextFormField(
+                    initialValue: newProduct.labelName,
                     decoration: const InputDecoration(
                       labelText: ' LabelName',
                       hintText: ' Name of the Label',
@@ -105,10 +119,10 @@ class AddFruit extends State<AddFruitForm> {
                     onChanged: (String? value) {
                       newProduct.labelName = value!;
                     }),
-                    TextFormField(
+                TextFormField(
+                    initialValue: newProduct.freeLabel,
                     decoration: const InputDecoration(
                       labelText: ' freelabel',
-                      
                     ),
                     onChanged: (String? value) {
                       newProduct.freeLabel = value!;
@@ -117,7 +131,6 @@ class AddFruit extends State<AddFruitForm> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
                     onPressed: () {
-                
                       if (_formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Processing Data')),
@@ -142,5 +155,3 @@ class AddFruit extends State<AddFruitForm> {
     apiproduct.postProducts(jsonEncode(newProduct));
   }
 }
-
-
